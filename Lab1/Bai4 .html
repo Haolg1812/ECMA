@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thêm Sinh Viên</title>
+    <style type="text/css" media="screen">
+      .user_item {
+        color: green;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" id="searchInput" placeholder="Nhập tên cần tìm kiếm" />
+    <button onclick="searchStudents()">Tìm kiếm</button>
+    <ul id="target"></ul>
+
+    <script>
+      let classRoom = [
+        "Nguyễn Tiến Duẩn",
+        "Hoàng Xuân Hiếu",
+        "Hồ Sỹ Hưng",
+        "Nguyễn Đức Thuận",
+        "Đoàn Minh Tùng",
+        "Hồ Sỹ Hùng",
+        "Đoàn Vua Dep Trai Vua Học Giỏi Hữu Quý",
+      ];
+
+      function splitFullName(fullName) {
+        const parts = fullName.split(" ");
+        const ho = parts[0];
+        const ten = parts.slice(1).join(" ");
+        return { ho, ten };
+      }
+
+      function addStudent(fullName) {
+        const { ho, ten } = splitFullName(fullName);
+        classRoom.push(`${ho} ${ten}`);
+      }
+
+      function removeStudent(fullName) {
+        const index = classRoom.findIndex(
+          (name) =>
+            normalizeString(name.toLowerCase()) ===
+            normalizeString(fullName.toLowerCase())
+        );
+        if (index !== -1) {
+          classRoom.splice(index, 1);
+        }
+      }
+
+      function normalizeString(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
+
+      function displayStudents(studentList) {
+        const targetElement = document.getElementById("target");
+        targetElement.innerHTML = ""; // Xóa danh sách hiện tại
+
+        studentList.forEach((fullName) => {
+          const { ho, ten } = splitFullName(fullName);
+          const listItem = document.createElement("li");
+          listItem.textContent = `Họ: ${ho}, Tên: ${ten}`;
+          targetElement.appendChild(listItem);
+        });
+      }
+
+      function searchStudents() {
+        const searchInput = document
+          .getElementById("searchInput")
+          .value.trim()
+          .toLowerCase();
+        const searchResults = classRoom.filter((name) =>
+          normalizeString(name.toLowerCase()).includes(
+            normalizeString(searchInput)
+          )
+        );
+        displayStudents(searchResults);
+      }
+
+      // Thêm sinh viên mới
+      addStudent("Trần Văn A");
+
+      // Lặp qua mảng và hiển thị họ và tên
+      displayStudents(classRoom);
+    </script>
+  </body>
+</html>

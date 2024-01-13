@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style type="text/css" media="screen">
+      .user_item {
+        color: green;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        max-width: 200px; /* Điều chỉnh độ rộng tối đa của form */
+      }
+
+      form label {
+        margin-bottom: 5px; /* Khoảng cách giữa các label */
+      }
+
+      form input,
+      form select,
+      form button {
+        margin-bottom: 10px; /* Khoảng cách giữa các input, select, và button */
+      }
+    </style>
+  </head>
+
+  <body>
+    <form id="userForm">
+      <label for="userId">ID:</label>
+      <input type="text" id="userId" name="userId" required />
+
+      <label for="userName">Name:</label>
+      <input type="text" id="userName" name="userName" required />
+
+      <label for="userGender">Gender:</label>
+      <select id="userGender" name="userGender" required>
+        <option value="1">Male</option>
+        <option value="2">Female</option>
+      </select>
+
+      <button type="button" onclick="addUser()">Add</button>
+    </form>
+
+    <ul id="target"></ul>
+
+    <script>
+      var users = [];
+
+      function addUser() {
+        // Lấy giá trị từ các trường input
+        var userId = document.getElementById("userId").value;
+        var userName = document.getElementById("userName").value;
+        var userGender = document.getElementById("userGender").value;
+
+        // Tạo user object từ các giá trị
+        var user = {
+          id: userId,
+          name: userName,
+          gender: parseInt(userGender),
+        };
+
+        // Thêm user vào mảng users
+        users.push(user);
+
+        // Gọi hàm để hiển thị lại danh sách users
+        displayUsers();
+      }
+
+      function displayUsers() {
+        var target = document.querySelector("#target");
+        // Xóa tất cả các phần tử trong #target trước khi hiển thị lại
+        target.innerHTML = "";
+
+        // Duyệt qua mảng users và tạo thẻ li cho mỗi user
+        users.forEach(function (user) {
+          var li = document.createElement("li");
+
+          // Hiển thị thông tin của user dưới dạng văn bản
+          var genderText = user.gender === 1 ? "Male" : "Female";
+          li.textContent = user.id + " - " + user.name + " - " + genderText;
+
+          // Thêm lớp user_item và thuộc tính data-gender vào thẻ li
+          li.classList.add("user_item");
+          li.setAttribute("data-gender", user.gender);
+
+          // Thêm thẻ li vào phần tử có id="target"
+          target.appendChild(li);
+        });
+      }
+    </script>
+  </body>
+</html>
